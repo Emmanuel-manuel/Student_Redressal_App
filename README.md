@@ -1,6 +1,6 @@
 # Student_Redressal_App
 
-In your lib directory import the following jar files:
+In your lib directory download and import the following jar files:
 1. AbsoluteLayout.jar
 2. RSCalendar.jar
 3. jCalendar.jar
