@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
@@ -43,7 +42,7 @@ public class MarkSheet {
             Object[] row;
             while (rs.next()) {
                 row = new Object[15];
-                row[0] = rs.getInt(1); 
+                row[0] = rs.getInt(1);
                 row[1] = rs.getString(2);
                 row[2] = rs.getInt(3);
                 row[3] = rs.getInt(4);
@@ -67,21 +66,37 @@ public class MarkSheet {
         }
     }
 
-    public double getCGPA(String sid){
+    public double getCGPA(String sid) {
         double cgpa = 0.0;
-        Statement st;
-        
-        try{
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("select avg(average) from score where student_id = "+sid+"");
-            if(rs.next()){
-                cgpa = rs.getDouble(1);
+
+        try (PreparedStatement ps = con.prepareStatement("SELECT AVG(average) FROM score WHERE student_id = ?")) {
+            ps.setString(1, sid);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cgpa = rs.getDouble(1);
+                }
             }
-                    
         } catch (SQLException ex) {
             Logger.getLogger(MarkSheet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return cgpa;
     }
-    
+
+//    public double getCGPA(String sid){
+//        double cgpa = 0.0;
+//        Statement st;
+//        
+//        try{
+//            st = con.createStatement();
+//            ResultSet rs = st.executeQuery("select avg(average) from score where student_id = "+sid+"");
+//            if(rs.next()){
+//                cgpa = rs.getDouble(1);
+//            }
+//                    
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MarkSheet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return cgpa;
+//    }
 }

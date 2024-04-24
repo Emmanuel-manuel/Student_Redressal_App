@@ -1,11 +1,9 @@
 package JFrames;
 
-
-import javax.swing.JOptionPane;
 import db.*;
-import java.sql.*;
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -15,7 +13,6 @@ import javax.swing.table.TableModel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author EMMANUEL
@@ -25,13 +22,11 @@ public class adminHome extends javax.swing.JFrame {
     //Global variable for Hover Effect
     Color mouseEnterColor = new Color(255, 153, 0);
     Color mouseExitColor = new Color(51, 51, 51);
-    
-    
+
     public adminHome() {
         initComponents();
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -55,22 +50,8 @@ public class adminHome extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        lbl_viewIssuedBooks = new javax.swing.JLabel();
-        jPanel8 = new javax.swing.JPanel();
-        lbl_manageBooks = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        lbl_manageStudents = new javax.swing.JLabel();
-        jPanel10 = new javax.swing.JPanel();
-        lbl_issueBook = new javax.swing.JLabel();
-        jPanel11 = new javax.swing.JPanel();
-        lbl_returnBook = new javax.swing.JLabel();
-        jPanel12 = new javax.swing.JPanel();
-        lbl_viewRecords = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         lbl_logout = new javax.swing.JLabel();
-        jPanel13 = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -180,7 +161,7 @@ public class adminHome extends javax.swing.JFrame {
         jLabel4.setText("Features");
         jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
 
-        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 250, 60));
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 60));
 
         jPanel5.setBackground(new java.awt.Color(255, 153, 0));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -191,150 +172,28 @@ public class adminHome extends javax.swing.JFrame {
         jLabel5.setText("   Home Page");
         jPanel5.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 190, 30));
 
-        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 250, 60));
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 250, 60));
 
         jPanel6.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel6MouseClicked(evt);
+            }
+        });
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(153, 153, 153));
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Library_32px.png"))); // NOI18N
-        jLabel6.setText("  LMS Dashboard");
+        jLabel6.setText("  Redressal Dashboard");
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
         jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
 
-        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 250, 60));
-
-        jPanel7.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_viewIssuedBooks.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        lbl_viewIssuedBooks.setForeground(new java.awt.Color(153, 153, 153));
-        lbl_viewIssuedBooks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Books_26px.png"))); // NOI18N
-        lbl_viewIssuedBooks.setText("  Label1");
-        lbl_viewIssuedBooks.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_viewIssuedBooksMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_viewIssuedBooksMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_viewIssuedBooksMouseExited(evt);
-            }
-        });
-        jPanel7.add(lbl_viewIssuedBooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 250, 60));
-
-        jPanel8.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_manageBooks.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        lbl_manageBooks.setForeground(new java.awt.Color(153, 153, 153));
-        lbl_manageBooks.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Book_26px.png"))); // NOI18N
-        lbl_manageBooks.setText("  View Clearance");
-        lbl_manageBooks.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_manageBooksMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_manageBooksMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_manageBooksMouseExited(evt);
-            }
-        });
-        jPanel8.add(lbl_manageBooks, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 250, 60));
-
-        jPanel9.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_manageStudents.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        lbl_manageStudents.setForeground(new java.awt.Color(153, 153, 153));
-        lbl_manageStudents.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Read_Online_26px.png"))); // NOI18N
-        lbl_manageStudents.setText("  View Missing Marks");
-        lbl_manageStudents.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_manageStudentsMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_manageStudentsMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_manageStudentsMouseExited(evt);
-            }
-        });
-        jPanel9.add(lbl_manageStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 60));
-
-        jPanel10.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_issueBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        lbl_issueBook.setForeground(new java.awt.Color(153, 153, 153));
-        lbl_issueBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Sell_26px.png"))); // NOI18N
-        lbl_issueBook.setText("  View Complains");
-        lbl_issueBook.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_issueBookMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_issueBookMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_issueBookMouseExited(evt);
-            }
-        });
-        jPanel10.add(lbl_issueBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 250, 60));
-
-        jPanel11.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel11.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_returnBook.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        lbl_returnBook.setForeground(new java.awt.Color(153, 153, 153));
-        lbl_returnBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Return_Purchase_26px.png"))); // NOI18N
-        lbl_returnBook.setText("  Label1");
-        lbl_returnBook.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_returnBookMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_returnBookMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_returnBookMouseExited(evt);
-            }
-        });
-        jPanel11.add(lbl_returnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 250, 60));
-
-        jPanel12.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lbl_viewRecords.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        lbl_viewRecords.setForeground(new java.awt.Color(153, 153, 153));
-        lbl_viewRecords.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_View_Details_26px.png"))); // NOI18N
-        lbl_viewRecords.setText("  View Records");
-        lbl_viewRecords.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lbl_viewRecordsMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                lbl_viewRecordsMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                lbl_viewRecordsMouseExited(evt);
-            }
-        });
-        jPanel12.add(lbl_viewRecords, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 430, 250, 60));
+        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 130, 250, 60));
 
         jPanel14.setBackground(new java.awt.Color(153, 51, 0));
         jPanel14.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -352,28 +211,6 @@ public class adminHome extends javax.swing.JFrame {
 
         jPanel3.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 610, 250, 60));
 
-        jPanel13.setBackground(new java.awt.Color(51, 51, 51));
-        jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel13.setFont(new java.awt.Font("Yu Gothic UI Semilight", 1, 18)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/adminIcons/icons8_Conference_26px.png"))); // NOI18N
-        jLabel13.setText("  View Complains");
-        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel13MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jLabel13MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jLabel13MouseExited(evt);
-            }
-        });
-        jPanel13.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 16, 230, 30));
-
-        jPanel3.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 550, 250, 60));
-
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 250, 690));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/icons/idea.png"))); // NOI18N
@@ -387,25 +224,21 @@ public class adminHome extends javax.swing.JFrame {
 
     private void btnclearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnclearActionPerformed
         setVisible(false);
-       new adminHome().setVisible(true);
+        new adminHome().setVisible(true);
     }//GEN-LAST:event_btnclearActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-       ResultSet rs = Select.getData("select * from users");
-       DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-       model.setRowCount(0);
-       try
-       {
-           while(rs.next())
-           {
-               model.addRow(new Object[ ]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(6),rs.getString(7),rs.getString(8)});
-           }
-           rs.close();
-       }
-       catch (Exception e)
-       {
-           JOptionPane.showMessageDialog(null, e);
-       }
+        ResultSet rs = Select.getData("select * from users");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        try {
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(6), rs.getString(7), rs.getString(8)});
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -413,123 +246,38 @@ public class adminHome extends javax.swing.JFrame {
         TableModel model = jTable1.getModel();
         String u_id = model.getValueAt(index, 2).toString();
         String status = model.getValueAt(index, 6).toString();
-        if(status.equals("Not_Approved"))
+        if (status.equals("Not_Approved")) {
             status = "Approved";
-        else
+        } else {
             status = "Not_Approved";
-        try
-        {
-            int a = JOptionPane.showConfirmDialog(null, "Do you want to change status of "+u_id+"","Select",JOptionPane.YES_NO_OPTION);
-            if (a==0)
-            {
-                InsertUpdateDelete.setData("update users set status='"+status+"' where user_id='"+u_id+"' ", "Status Changed Successfully");
+        }
+        try {
+            int a = JOptionPane.showConfirmDialog(null, "Do you want to change status of " + u_id + "", "Select", JOptionPane.YES_NO_OPTION);
+            if (a == 0) {
+                InsertUpdateDelete.setData("update users set status='" + status + "' where user_id='" + u_id + "' ", "Status Changed Successfully");
                 setVisible(false);
                 new adminHome().setVisible(true);
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void key_released(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_key_released
-        
+
         String search_by = txt_search_by_name_or_ID.getText();
-       ResultSet rs = Select.getData("select * from users where username like '%"+search_by+"%' or user_id like '%"+search_by+"%' ");
-       DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
-       model.setRowCount(0);
-       try
-       {
-           while(rs.next())
-           {
-               model.addRow(new Object[ ]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(6),rs.getString(7),rs.getString(8) });
-           }
-           rs.close();
-       }
-       catch (Exception e)
-       {
-           JOptionPane.showMessageDialog(null, e);
-       }
+        ResultSet rs = Select.getData("select * from users where username like '%" + search_by + "%' or user_id like '%" + search_by + "%' ");
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        try {
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(6), rs.getString(7), rs.getString(8)});
+            }
+            rs.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_key_released
-
-    private void lbl_viewIssuedBooksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_viewIssuedBooksMouseClicked
-//        ViewIssuedBookDetails viewIssued = new ViewIssuedBookDetails();
-//        viewIssued.setVisible(true);
-//        dispose();
-    }//GEN-LAST:event_lbl_viewIssuedBooksMouseClicked
-
-    private void lbl_viewIssuedBooksMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_viewIssuedBooksMouseEntered
-        jPanel7.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_lbl_viewIssuedBooksMouseEntered
-
-    private void lbl_viewIssuedBooksMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_viewIssuedBooksMouseExited
-        jPanel7.setBackground(mouseExitColor);
-    }//GEN-LAST:event_lbl_viewIssuedBooksMouseExited
-
-    private void lbl_manageBooksMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_manageBooksMouseClicked
-//        ManageBooks books = new ManageBooks();
-//        books.setVisible(true);
-//        dispose();
-    }//GEN-LAST:event_lbl_manageBooksMouseClicked
-
-    private void lbl_manageBooksMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_manageBooksMouseEntered
-        jPanel8.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_lbl_manageBooksMouseEntered
-
-    private void lbl_manageBooksMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_manageBooksMouseExited
-        jPanel8.setBackground(mouseExitColor);
-    }//GEN-LAST:event_lbl_manageBooksMouseExited
-
-    private void lbl_manageStudentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_manageStudentsMouseClicked
-//        ManageStudents student = new ManageStudents();
-//        student.setVisible(true);
-//        dispose();
-    }//GEN-LAST:event_lbl_manageStudentsMouseClicked
-
-    private void lbl_manageStudentsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_manageStudentsMouseEntered
-        jPanel9.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_lbl_manageStudentsMouseEntered
-
-    private void lbl_manageStudentsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_manageStudentsMouseExited
-        jPanel9.setBackground(mouseExitColor);
-    }//GEN-LAST:event_lbl_manageStudentsMouseExited
-
-    private void lbl_issueBookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_issueBookMouseClicked
-        
-    }//GEN-LAST:event_lbl_issueBookMouseClicked
-
-    private void lbl_issueBookMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_issueBookMouseEntered
-        jPanel10.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_lbl_issueBookMouseEntered
-
-    private void lbl_issueBookMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_issueBookMouseExited
-        jPanel10.setBackground(mouseExitColor);
-    }//GEN-LAST:event_lbl_issueBookMouseExited
-
-    private void lbl_returnBookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_returnBookMouseClicked
-        
-    }//GEN-LAST:event_lbl_returnBookMouseClicked
-
-    private void lbl_returnBookMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_returnBookMouseEntered
-        jPanel11.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_lbl_returnBookMouseEntered
-
-    private void lbl_returnBookMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_returnBookMouseExited
-        jPanel11.setBackground(mouseExitColor);
-    }//GEN-LAST:event_lbl_returnBookMouseExited
-
-    private void lbl_viewRecordsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_viewRecordsMouseClicked
-        
-    }//GEN-LAST:event_lbl_viewRecordsMouseClicked
-
-    private void lbl_viewRecordsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_viewRecordsMouseEntered
-        jPanel12.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_lbl_viewRecordsMouseEntered
-
-    private void lbl_viewRecordsMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_viewRecordsMouseExited
-        jPanel12.setBackground(mouseExitColor);
-    }//GEN-LAST:event_lbl_viewRecordsMouseExited
 
     private void lbl_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_logoutMouseClicked
         LoginPage login = new LoginPage();
@@ -537,26 +285,25 @@ public class adminHome extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_lbl_logoutMouseClicked
 
-    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-        
-    }//GEN-LAST:event_jLabel13MouseClicked
-
-    private void jLabel13MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseEntered
-        jPanel13.setBackground(mouseEnterColor);
-    }//GEN-LAST:event_jLabel13MouseEntered
-
-    private void jLabel13MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseExited
-        jPanel13.setBackground(mouseExitColor);
-    }//GEN-LAST:event_jLabel13MouseExited
-
     private void lbl_close1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_close1MouseClicked
-        int a= JOptionPane.showConfirmDialog(null, "Do you really want to Close Application?", "Select",JOptionPane.YES_NO_OPTION);
-        if(a==0)
-        {
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Close Application?", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
             System.exit(0);
         }
-        
+
     }//GEN-LAST:event_lbl_close1MouseClicked
+
+    private void jPanel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel6MouseClicked
+
+        new adminRedressal().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jPanel6MouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        
+        new adminRedressal().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jLabel6MouseClicked
 
     /**
      * @param args the command line arguments
@@ -598,7 +345,6 @@ public class adminHome extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnclear;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -608,10 +354,6 @@ public class adminHome extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
@@ -619,19 +361,10 @@ public class adminHome extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbl_close1;
-    private javax.swing.JLabel lbl_issueBook;
     private javax.swing.JLabel lbl_logout;
-    private javax.swing.JLabel lbl_manageBooks;
-    private javax.swing.JLabel lbl_manageStudents;
-    private javax.swing.JLabel lbl_returnBook;
-    private javax.swing.JLabel lbl_viewIssuedBooks;
-    private javax.swing.JLabel lbl_viewRecords;
     private javax.swing.JTextField txt_search_by_name_or_ID;
     // End of variables declaration//GEN-END:variables
 }

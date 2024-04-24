@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author EMMANUEL
  */
 public class Score {
-
+    
     Connection con = MyConnection.getConnection();
     PreparedStatement ps;
 

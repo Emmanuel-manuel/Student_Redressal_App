@@ -85,7 +85,7 @@ public class LoginPage extends javax.swing.JFrame {
                 if (rs.getString("status").equals("Approved"))
                 {
                     
-                    new DeanHome().setVisible(true);
+                    new COD_Home().setVisible(true);
                     dispose();
                 }
                 else
