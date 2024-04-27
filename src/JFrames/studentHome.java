@@ -4,21 +4,22 @@ import db.*;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
-import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,6 +29,124 @@ import javax.swing.table.DefaultTableModel;
  */
 public class studentHome extends javax.swing.JFrame {
 
+    //    ............  GENERATE TRANSCRIPT REPORT METHOD  ..........
+    public void my_report() {
+        // Clear the JTextArea
+        txt_transcript.setText("");
+
+        // Set the logo icon from file path: G:\Netbeans_project\Student_Redressal_App\src\res\icons
+        String logoPath = "src\\res\\icons\\kafu_logo.png";
+//    String logoPath = "/src/res/icons/kafu_logo.png";
+        String base64Logo = encodeImageToBase64(logoPath);
+        ImageIcon logoIcon = new ImageIcon(Base64.getDecoder().decode(base64Logo));
+        lbl_logo.setIcon(logoIcon);
+
+        // Append the transcript text to the JTextArea
+        txt_transcript.append(" \n \n ");
+        txt_transcript.append(" \t KAIMOSI FRIENDS UNIVERSITY \n");
+        txt_transcript.append(" \t  P.O BOX 385 - 50309 KAIMOSI - KENYA \n");
+        txt_transcript.append(" \t     CELL: 0777373633 \n");
+        txt_transcript.append(" \t Email: info@kafu.ac.ke ~ Web: www.kafu.ac.ke \n");
+        txt_transcript.append("     PROVISIONAL UNDERGRADUATE ACADEMIC TRANSCRIPT \n");
+        txt_transcript.append("_______________________________________________________\n");
+
+        // Fetch student's name from the database
+        String regNo = txtSearchMarkSheet.getText();
+        String studentName = getStudentName(regNo);
+
+        txt_transcript.append("STUDENT NAME: " + studentName + "          " + "REG. NO: " + regNo + "\n");
+        txt_transcript.append("PROGRAMME: BACHELOR OF SCIENCE (INFORMATION TECHNOLOGY) \n");
+        txt_transcript.append("DEPARTMENT: INFORMATION TECHNOLOGY AND INFORMATICS \n");
+        txt_transcript.append("SCHOOL/FACULTY: SCHOOL OF COMPUTING AND INFORMATION \n"
+                + "                TECHNOLOGY \n");
+
+        txt_transcript.append("_______________________________________________________\n");
+
+        txt_transcript.append("UNIT TITLE              " + "       |" + "          MARKS " + "\n");
+        txt_transcript.append("\n");
+
+        int maxCourseLen = 0;
+        for (int i = 0; i < tbl_detailsMarksSheet.getRowCount(); i++) {
+            for (int j = 4; j <= 12; j += 2) {
+                String course = tbl_detailsMarksSheet.getValueAt(i, j).toString();
+                maxCourseLen = Math.max(maxCourseLen, course.length());
+            }
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tbl_detailsMarksSheet.getModel();
+//        This is responsible for creating vertical lines in the report
+//        StringBuilder line = new StringBuilder();
+
+        for (int i = 0; i < tbl_detailsMarksSheet.getRowCount(); i++) {
+//            line.setLength(0);
+
+            String course1 = tbl_detailsMarksSheet.getValueAt(i, 4).toString();
+            String score1 = tbl_detailsMarksSheet.getValueAt(i, 5).toString();
+            String course2 = tbl_detailsMarksSheet.getValueAt(i, 6).toString();
+            String score2 = tbl_detailsMarksSheet.getValueAt(i, 7).toString();
+            String course3 = tbl_detailsMarksSheet.getValueAt(i, 8).toString();
+            String score3 = tbl_detailsMarksSheet.getValueAt(i, 9).toString();
+            String course4 = tbl_detailsMarksSheet.getValueAt(i, 10).toString();
+            String score4 = tbl_detailsMarksSheet.getValueAt(i, 11).toString();
+            String course5 = tbl_detailsMarksSheet.getValueAt(i, 12).toString();
+            String score5 = tbl_detailsMarksSheet.getValueAt(i, 13).toString();
+
+            txt_transcript.append(String.format("%-" + (maxCourseLen + 10) + "s%s%n", course1, score1));
+            txt_transcript.append("_______________________________________________________\n");
+            txt_transcript.append(String.format("%-" + (maxCourseLen + 10) + "s%s%n", course2, score2));
+            txt_transcript.append("_______________________________________________________\n");
+            txt_transcript.append(String.format("%-" + (maxCourseLen + 10) + "s%s%n", course3, score3));
+            txt_transcript.append("_______________________________________________________\n");
+            txt_transcript.append(String.format("%-" + (maxCourseLen + 10) + "s%s%n", course4, score4));
+            txt_transcript.append("_______________________________________________________\n");
+            txt_transcript.append(String.format("%-" + (maxCourseLen + 10) + "s%s%n", course5, score5));
+            txt_transcript.append("_______________________________________________________\n");
+
+        }
+
+        String grand_tot = lblCummulative.getText();
+        String Tdate = txtDate.getText();
+
+        txt_transcript.append("========================================================\n");
+        txt_transcript.append(grand_tot + " %" + "\n");
+        txt_transcript.append("========================================================\n" + "\n");
+        txt_transcript.append("Signed:_________________________" + "   " + Tdate + "\n");
+        txt_transcript.append("\t" + "DEAN, SCHOOL OF COMPUTING " + "  " + "DATE" + "\n");
+        txt_transcript.append("\t" + "& INFORMATION TECHNOLOGY " + "\n");
+    }
+
+//    ................. METHOD TO PULL STUDENT_NAME ......................
+    private String getStudentName(String regNo) {
+        String studentName = "";
+        try {
+            String query = "SELECT name FROM student WHERE student_id = ?";
+            ps = con.prepareStatement(query);
+            ps.setString(1, regNo);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                studentName = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return studentName;
+    }
+
+//    ................. METHOD TO INSERT LOGO ............................
+    private static String encodeImageToBase64(String imagePath) {
+        String base64Image = "";
+        try {
+            File file = new File(imagePath);
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            base64Image = Base64.getEncoder().encodeToString(bytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return base64Image;
+    }
+
+
+    
     //Calls the other public java Classes
     Complaints complaints = new Complaints();
     MarkSheet markSheet = new MarkSheet();
@@ -67,6 +186,7 @@ public class studentHome extends javax.swing.JFrame {
         lbl_close1 = new javax.swing.JLabel();
         txtTime = new javax.swing.JLabel();
         txtDate = new javax.swing.JLabel();
+        lbl_logout = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -107,46 +227,20 @@ public class studentHome extends javax.swing.JFrame {
         jLabel26 = new javax.swing.JLabel();
         txtSearchMarkSheet = new app.bolivia.swing.JCTextField();
         btnSearchMarksheet = new rojerusan.RSMaterialButtonCircle();
-        jPanel22 = new javax.swing.JPanel();
-        lblCummulative = new javax.swing.JLabel();
+        transcriptPanel = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        txt_transcript = new javax.swing.JTextArea();
+        lbl_logo = new javax.swing.JLabel();
         jPanel31 = new javax.swing.JPanel();
         jPanel33 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tbl_detailsMarksSheet = new rojeru_san.complementos.RSTableMetro();
         jPanel34 = new javax.swing.JPanel();
-        btnRefresh10 = new rojerusan.RSMaterialButtonCircle();
         btnPrintMarkSheet = new rojerusan.RSMaterialButtonCircle();
         btnClearMarkSheet = new rojerusan.RSMaterialButtonCircle();
-        jPanel29 = new javax.swing.JPanel();
-        jPanel30 = new javax.swing.JPanel();
-        jLabel29 = new javax.swing.JLabel();
-        jLabel36 = new javax.swing.JLabel();
-        txtCourse = new app.bolivia.swing.JCTextField();
-        cboUnits = new rojerusan.RSComboMetro();
-        cboYear = new rojerusan.RSComboMetro();
-        jLabel42 = new javax.swing.JLabel();
-        cboSem = new rojerusan.RSComboMetro();
-        jLabel43 = new javax.swing.JLabel();
-        txtTutorName = new app.bolivia.swing.JCTextField();
-        jLabel30 = new javax.swing.JLabel();
-        txtMissing = new app.bolivia.swing.JCTextField();
-        jLabel31 = new javax.swing.JLabel();
-        txtRegNo = new app.bolivia.swing.JCTextField();
-        jLabel32 = new javax.swing.JLabel();
-        jPanel36 = new javax.swing.JPanel();
-        jPanel37 = new javax.swing.JPanel();
-        jLabel41 = new javax.swing.JLabel();
-        btnRefreshSubject = new rojerusan.RSMaterialButtonCircle();
-        txtSearchUnit = new app.bolivia.swing.JCTextField();
-        jPanel38 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tbl_subjectsDetails = new rojeru_san.complementos.RSTableMetro();
-        jPanel39 = new javax.swing.JPanel();
-        btnLogoutStudent = new rojerusan.RSMaterialButtonCircle();
-        btnSubmit = new rojerusan.RSMaterialButtonCircle();
-        btnDelete = new rojerusan.RSMaterialButtonCircle();
-        btnPrint = new rojerusan.RSMaterialButtonCircle();
-        btnClear = new rojerusan.RSMaterialButtonCircle();
+        jPanel22 = new javax.swing.JPanel();
+        lblCummulative = new javax.swing.JLabel();
+        btnGenerateTranscript = new rojerusan.RSMaterialButtonCircle();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1370, 760));
@@ -191,11 +285,19 @@ public class studentHome extends javax.swing.JFrame {
 
         txtTime.setFont(new java.awt.Font("Times New Roman", 1, 20)); // NOI18N
         txtTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel2.add(txtTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 4, 180, 30));
+        jPanel2.add(txtTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 10, 180, 30));
 
         txtDate.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         txtDate.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel2.add(txtDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 40, 210, 30));
+        jPanel2.add(txtDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 40, 210, 30));
+
+        lbl_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/res/icons/logout.png"))); // NOI18N
+        lbl_logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbl_logoutMouseClicked(evt);
+            }
+        });
+        jPanel2.add(lbl_logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 0, 60, 60));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, -1));
 
@@ -409,17 +511,20 @@ public class studentHome extends javax.swing.JFrame {
 
         jPanel28.add(jPanel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 90));
 
-        jPanel22.setBackground(new java.awt.Color(51, 255, 153));
-        jPanel22.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 3, true));
-        jPanel22.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        transcriptPanel.setLayout(new java.awt.BorderLayout());
 
-        lblCummulative.setBackground(new java.awt.Color(51, 255, 153));
-        lblCummulative.setFont(new java.awt.Font("Times New Roman", 1, 25)); // NOI18N
-        lblCummulative.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCummulative.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel22.add(lblCummulative, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 390, 70));
+        txt_transcript.setEditable(false);
+        txt_transcript.setColumns(20);
+        txt_transcript.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        txt_transcript.setRows(20);
+        jScrollPane8.setViewportView(txt_transcript);
 
-        jPanel28.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 560, 390, 80));
+        transcriptPanel.add(jScrollPane8, java.awt.BorderLayout.CENTER);
+
+        lbl_logo.setBackground(new java.awt.Color(204, 204, 204));
+        transcriptPanel.add(lbl_logo, java.awt.BorderLayout.PAGE_START);
+
+        jPanel28.add(transcriptPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 390, 490));
 
         jPanel27.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 640));
 
@@ -462,21 +567,13 @@ public class studentHome extends javax.swing.JFrame {
         jPanel34.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 3, true));
         jPanel34.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnRefresh10.setText("Logout");
-        btnRefresh10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefresh10ActionPerformed(evt);
-            }
-        });
-        jPanel34.add(btnRefresh10, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 130, 60));
-
         btnPrintMarkSheet.setText("Print");
         btnPrintMarkSheet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPrintMarkSheetActionPerformed(evt);
             }
         });
-        jPanel34.add(btnPrintMarkSheet, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 130, 60));
+        jPanel34.add(btnPrintMarkSheet, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 130, 60));
 
         btnClearMarkSheet.setText("Clear");
         btnClearMarkSheet.addActionListener(new java.awt.event.ActionListener() {
@@ -484,224 +581,35 @@ public class studentHome extends javax.swing.JFrame {
                 btnClearMarkSheetActionPerformed(evt);
             }
         });
-        jPanel34.add(btnClearMarkSheet, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 130, 60));
+        jPanel34.add(btnClearMarkSheet, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 130, 60));
+
+        jPanel22.setBackground(new java.awt.Color(51, 255, 153));
+        jPanel22.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 3, true));
+        jPanel22.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblCummulative.setBackground(new java.awt.Color(51, 255, 153));
+        lblCummulative.setFont(new java.awt.Font("Times New Roman", 1, 25)); // NOI18N
+        lblCummulative.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCummulative.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel22.add(lblCummulative, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 70));
+
+        jPanel34.add(jPanel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 0, 380, 70));
+
+        btnGenerateTranscript.setText("Generate Transcript");
+        btnGenerateTranscript.setFont(new java.awt.Font("Constantia", 0, 17)); // NOI18N
+        btnGenerateTranscript.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        btnGenerateTranscript.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateTranscriptActionPerformed(evt);
+            }
+        });
+        jPanel34.add(btnGenerateTranscript, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 210, 60));
 
         jPanel31.add(jPanel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 970, 70));
 
         jPanel27.add(jPanel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 970, 640));
 
         jTabbedPane1.addTab("Marks Sheet", jPanel27);
-
-        jPanel29.setBackground(new java.awt.Color(0, 153, 153));
-        jPanel29.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 2, true));
-        jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel30.setBackground(new java.awt.Color(51, 255, 153));
-        jPanel30.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 2, true));
-        jPanel30.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel29.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel29.setText("Course: ");
-        jPanel30.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 80, -1));
-
-        jLabel36.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel36.setText("Units: ");
-        jPanel30.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 80, 20));
-
-        txtCourse.setBackground(new java.awt.Color(204, 204, 204));
-        txtCourse.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        txtCourse.setPlaceholder("Enter Course Taken");
-        txtCourse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCourseActionPerformed(evt);
-            }
-        });
-        jPanel30.add(txtCourse, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 280, 40));
-
-        cboUnits.setForeground(new java.awt.Color(0, 0, 0));
-        cboUnits.setColorFondo(new java.awt.Color(204, 204, 204));
-        cboUnits.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
-        jPanel30.add(cboUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, 280, 40));
-
-        cboYear.setForeground(new java.awt.Color(0, 0, 0));
-        cboYear.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Year 1", "Year 2", "Year 3", "Year 4" }));
-        cboYear.setColorFondo(new java.awt.Color(204, 204, 204));
-        cboYear.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
-        jPanel30.add(cboYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, 230, 40));
-
-        jLabel42.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel42.setText("Year: ");
-        jPanel30.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 80, -1));
-
-        cboSem.setForeground(new java.awt.Color(0, 0, 0));
-        cboSem.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Semester 1", "Semester 2" }));
-        cboSem.setColorFondo(new java.awt.Color(204, 204, 204));
-        cboSem.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
-        jPanel30.add(cboSem, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 230, 40));
-
-        jLabel43.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel43.setText("Semester:");
-        jPanel30.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 80, -1));
-
-        txtTutorName.setBackground(new java.awt.Color(204, 204, 204));
-        txtTutorName.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        txtTutorName.setPlaceholder("Enter Tutor's Name");
-        txtTutorName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTutorNameActionPerformed(evt);
-            }
-        });
-        jPanel30.add(txtTutorName, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 280, 40));
-
-        jLabel30.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel30.setText("Taught by: ");
-        jPanel30.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 90, -1));
-
-        txtMissing.setBackground(new java.awt.Color(204, 204, 204));
-        txtMissing.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
-        txtMissing.setPlaceholder("Indicate whether it's CAT or Exams marks missing");
-        txtMissing.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMissingActionPerformed(evt);
-            }
-        });
-        jPanel30.add(txtMissing, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 400, 280, 40));
-
-        jLabel31.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel31.setText("Missing: ");
-        jPanel30.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, 90, -1));
-
-        txtRegNo.setBackground(new java.awt.Color(204, 204, 204));
-        txtRegNo.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        txtRegNo.setPlaceholder("Enter Your Registration Number");
-        txtRegNo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRegNoActionPerformed(evt);
-            }
-        });
-        jPanel30.add(txtRegNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 280, 40));
-
-        jLabel32.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel32.setText("Reg No: ");
-        jPanel30.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 80, -1));
-
-        jPanel29.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 400, 630));
-
-        jPanel36.setBackground(new java.awt.Color(51, 255, 153));
-        jPanel36.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 2, true));
-        jPanel36.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel37.setBackground(new java.awt.Color(51, 255, 153));
-        jPanel37.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 3, true));
-        jPanel37.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel41.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel41.setText("Search Unit: ");
-        jPanel37.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-
-        btnRefreshSubject.setText("Refresh");
-        btnRefreshSubject.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshSubjectActionPerformed(evt);
-            }
-        });
-        jPanel37.add(btnRefreshSubject, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 10, 140, 50));
-
-        txtSearchUnit.setFont(new java.awt.Font("Times New Roman", 0, 16)); // NOI18N
-        txtSearchUnit.setPlaceholder("Search by Unit name");
-        txtSearchUnit.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtSearchUnitKeyReleased(evt);
-            }
-        });
-        jPanel37.add(txtSearchUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 10, 380, 40));
-
-        jPanel36.add(jPanel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 920, 70));
-
-        jPanel38.setBackground(new java.awt.Color(51, 255, 153));
-        jPanel38.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 3, true));
-        jPanel38.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        tbl_subjectsDetails.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Course", "Year", "Semester", "Unit Name", "Tutor Name", "Missing?"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tbl_subjectsDetails.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        tbl_subjectsDetails.setFuenteFilas(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        tbl_subjectsDetails.setFuenteFilasSelect(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        tbl_subjectsDetails.setFuenteHead(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        tbl_subjectsDetails.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbl_subjectsDetailsMouseClicked(evt);
-            }
-        });
-        jScrollPane4.setViewportView(tbl_subjectsDetails);
-
-        jPanel38.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(3, 4, 910, 450));
-
-        jPanel36.add(jPanel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 920, 460));
-
-        jPanel39.setBackground(new java.awt.Color(51, 255, 153));
-        jPanel39.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 255, 102), 3, true));
-        jPanel39.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        btnLogoutStudent.setText("Logout");
-        btnLogoutStudent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogoutStudentActionPerformed(evt);
-            }
-        });
-        jPanel39.add(btnLogoutStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, 130, 60));
-
-        btnSubmit.setText("Submit");
-        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSubmitActionPerformed(evt);
-            }
-        });
-        jPanel39.add(btnSubmit, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 130, 60));
-
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-        jPanel39.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 10, 140, 60));
-
-        btnPrint.setText("Print");
-        btnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintActionPerformed(evt);
-            }
-        });
-        jPanel39.add(btnPrint, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 10, 130, 60));
-
-        btnClear.setText("Clear");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
-            }
-        });
-        jPanel39.add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, 130, 60));
-
-        jPanel36.add(jPanel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, 910, 80));
-
-        jPanel29.add(jPanel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, 930, 630));
-
-        jTabbedPane1.addTab("Report Missing Marks", jPanel29);
 
         jPanel1.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1370, 680));
 
@@ -824,23 +732,10 @@ public class studentHome extends javax.swing.JFrame {
 
     private void btnPrintMarkSheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintMarkSheetActionPerformed
         try {
-            MessageFormat header = new MessageFormat("Kaimosi Friends University Student Id: " + txtSearchMarkSheet.getText() + "CGPA: " + lblCummulative.getText());
-            //            MessageFormat c = new MessageFormat("Students' Information");
-            MessageFormat footer = new MessageFormat("Page{0,number,integer}");
-
-            tbl_detailsMarksSheet.print(JTable.PrintMode.FIT_WIDTH, header, footer);
-
-            //            tbl_details.print();
+            txt_transcript.print();
         } catch (Exception e) {
         }
-        //        catch (PrinterException ex) {
-        //            Logger.getLogger(landing_page.class.getName()).log(Level.SEVERE, null, ex);
-        //        }
     }//GEN-LAST:event_btnPrintMarkSheetActionPerformed
-
-    private void btnRefresh10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefresh10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRefresh10ActionPerformed
 
     private void btnSearchMarksheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchMarksheetActionPerformed
         if (txtSearchMarkSheet.getText().isEmpty()) {
@@ -865,56 +760,6 @@ public class studentHome extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnSearchMarksheetActionPerformed
-
-//   ...........  END OF SCORE   .............
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
-
-    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPrintActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSubmitActionPerformed
-
-    private void btnLogoutStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutStudentActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnLogoutStudentActionPerformed
-
-    private void tbl_subjectsDetailsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_subjectsDetailsMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tbl_subjectsDetailsMouseClicked
-
-    private void txtSearchUnitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchUnitKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchUnitKeyReleased
-
-    private void btnRefreshSubjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshSubjectActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRefreshSubjectActionPerformed
-
-    private void txtRegNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRegNoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRegNoActionPerformed
-
-    private void txtMissingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMissingActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMissingActionPerformed
-
-    private void txtTutorNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTutorNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTutorNameActionPerformed
-
-    private void txtCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCourseActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCourseActionPerformed
 
 //    ...........   END OF MISSING MARKS  ............
 //   ............  START OF COMPLAINTS MODULE ........
@@ -1014,6 +859,19 @@ public class studentHome extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnSearchComplaintNoActionPerformed
 
+    private void lbl_logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbl_logoutMouseClicked
+        int a = JOptionPane.showConfirmDialog(null, "Do you really want to Logout?", "Logout?", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            setVisible(false);
+            new LoginPage().setVisible(true);
+        }
+    }//GEN-LAST:event_lbl_logoutMouseClicked
+
+    private void btnGenerateTranscriptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTranscriptActionPerformed
+
+        my_report();
+    }//GEN-LAST:event_btnGenerateTranscriptActionPerformed
+
 //    ............ USES complaint_id TO PULL DATA FROM COMPLAINTS TABLE TO THE INTERFACE
     public boolean getComplaintDetails(int ComplaintNo) {
         try {
@@ -1111,23 +969,14 @@ public class studentHome extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojerusan.RSMaterialButtonCircle btnBrowse;
-    private rojerusan.RSMaterialButtonCircle btnClear;
     private rojerusan.RSMaterialButtonCircle btnClearMarkSheet;
-    private rojerusan.RSMaterialButtonCircle btnDelete;
-    private rojerusan.RSMaterialButtonCircle btnLogoutStudent;
+    private rojerusan.RSMaterialButtonCircle btnGenerateTranscript;
     private rojerusan.RSMaterialButtonCircle btnPost;
-    private rojerusan.RSMaterialButtonCircle btnPrint;
     private rojerusan.RSMaterialButtonCircle btnPrintMarkSheet;
-    private rojerusan.RSMaterialButtonCircle btnRefresh10;
     private rojerusan.RSMaterialButtonCircle btnRefreshComplaints;
-    private rojerusan.RSMaterialButtonCircle btnRefreshSubject;
     private rojerusan.RSMaterialButtonCircle btnSearchComplaintNo;
     private rojerusan.RSMaterialButtonCircle btnSearchMarksheet;
-    private rojerusan.RSMaterialButtonCircle btnSubmit;
     private rojerusan.RSComboMetro cboReason;
-    private rojerusan.RSComboMetro cboSem;
-    private rojerusan.RSComboMetro cboUnits;
-    private rojerusan.RSComboMetro cboYear;
     private com.toedter.calendar.JDateChooser jComplaintDate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1137,15 +986,7 @@ public class studentHome extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
-    private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
@@ -1157,44 +998,36 @@ public class studentHome extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel27;
     private javax.swing.JPanel jPanel28;
-    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel31;
     private javax.swing.JPanel jPanel32;
     private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel34;
-    private javax.swing.JPanel jPanel36;
-    private javax.swing.JPanel jPanel37;
-    private javax.swing.JPanel jPanel38;
-    private javax.swing.JPanel jPanel39;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel jlabelimage;
     private javax.swing.JLabel lblCummulative;
     private javax.swing.JLabel lbl_close1;
+    private javax.swing.JLabel lbl_logo;
+    private javax.swing.JLabel lbl_logout;
     private rojeru_san.complementos.RSTableMetro tbl_detailsMarksSheet;
-    private rojeru_san.complementos.RSTableMetro tbl_subjectsDetails;
     private javax.swing.JTextArea textDescription;
     private javax.swing.JTextArea textResponse;
+    private javax.swing.JPanel transcriptPanel;
     public static app.bolivia.swing.JCTextField txtComplaintDate;
     private app.bolivia.swing.JCTextField txtComplaintID;
     private app.bolivia.swing.JCTextField txtComplaintINID;
     public static javax.swing.JTextField txtComplaintReason;
-    private app.bolivia.swing.JCTextField txtCourse;
     private javax.swing.JLabel txtDate;
-    private app.bolivia.swing.JCTextField txtMissing;
-    private app.bolivia.swing.JCTextField txtRegNo;
     private app.bolivia.swing.JCTextField txtSearchComplaintNo;
     private app.bolivia.swing.JCTextField txtSearchMarkSheet;
-    private app.bolivia.swing.JCTextField txtSearchUnit;
     private javax.swing.JLabel txtTime;
-    private app.bolivia.swing.JCTextField txtTutorName;
+    private javax.swing.JTextArea txt_transcript;
     // End of variables declaration//GEN-END:variables
 }
